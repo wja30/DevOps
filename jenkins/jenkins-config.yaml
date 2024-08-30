@@ -27,7 +27,7 @@ jenkins:
           - envVar:
               key: "JENKINS_URL"
               value: "http://192.168.56.11"
-          image: "jenkins/inbound-agent:latest"
+          image: "jenkins/inbound-agent"
           livenessProbe:
             failureThreshold: 0
             initialDelaySeconds: 0
