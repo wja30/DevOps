@@ -1,3 +1,5 @@
+namespace: default
+
 master:
   installPlugins:
     - kubernetes:4285.v50ed5f624918
