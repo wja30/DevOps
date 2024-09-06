@@ -1,0 +1,8 @@
+namespace: default
+
+master:
+  installPlugins:
+    - kubernetes:4285.v50ed5f624918
+    - workflow-aggregator:600.vb_57cdd26fdd7
+    - git:5.4.1
+    - configuration-as-code:1850.va_a_8c31d3158b_
