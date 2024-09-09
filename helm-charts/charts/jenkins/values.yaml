@@ -531,9 +531,14 @@ controller:
 
     # Ignored if authorizationStrategy is defined in controller.JCasC.configScripts
     # -- Jenkins Config as Code Authorization Strategy-section
+    # since login error bug, break the security plan temporarily
     authorizationStrategy: |-
-      loggedInUsersCanDoAnything:
-        allowAnonymousRead: false
+      anyone:
+        allowAnonymousRead: true
+
+    #authorizationStrategy: |-
+    #  loggedInUsersCanDoAnything:
+    #    allowAnonymousRead: false
 
     # -- Annotations for the JCasC ConfigMap
     configMapAnnotations: {}
