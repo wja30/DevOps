@@ -2,9 +2,9 @@ jenkins:
   agentProtocols:
   - "JNLP4-connect"
   - "Ping"
-  authorizationStrategy:
-    loggedInUsersCanDoAnything:
-      allowAnonymousRead: false
+  #authorizationStrategy:
+  #  loggedInUsersCanDoAnything:
+  #    allowAnonymousRead: false
   clouds:
   - kubernetes:
       containerCap: 10
