@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    environment {
+        // 환경 변수 설정
+        REGISTRY_URL = "192.168.56.30:8443"
+        NAMESPACE = "my-namespace"
+        IMAGE_NAME = "my-app"
+        TAG = "latest"
+        KUBE_NAMESPACE = "default" // Kubernetes 네임스페이스
+        DEPLOYMENT_NAME = "my-app-deployment" // Kubernetes 배포 이름
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Docker 이미지를 빌드하고 태그 지정
+                    docker.build("${REGISTRY_URL}/${NAMESPACE}/${IMAGE_NAME}:${TAG}")
+                }
+            }
+        }
+        
+        stage('Push') {
+            steps {
+                script {
+                    // Docker 레지스트리에 푸시
+                    docker.withRegistry("https://${REGISTRY_URL}", 'docker-credentials-id') {
+                        docker.image("${REGISTRY_URL}/${NAMESPACE}/${IMAGE_NAME}:${TAG}").push()
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                script {
+                    // Kubernetes에 롤링 업데이트 수행
+                    sh """
+                    kubectl set image deployment/${DEPLOYMENT_NAME} ${DEPLOYMENT_NAME}=${REGISTRY_URL}/${NAMESPACE}/${IMAGE_NAME}:${TAG} -n ${KUBE_NAMESPACE}
+                    """
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Deployment completed successfully!'
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
+}
+

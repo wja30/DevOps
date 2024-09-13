@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+    
+    environment {
+        IMAGE_NAME = 'your-docker-image-name'
+        IMAGE_TAG = 'your-image-tag'
+        KUBE_NAMESPACE = 'your-kubernetes-namespace'
+        CANARY_DEPLOYMENT = 'your-canary-deployment-name'
+        MAIN_DEPLOYMENT = 'your-main-deployment-name'
+    }
+    
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Build your Docker image
+                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                }
+            }
+        }
+        
+        stage('Push to Registry') {
+            steps {
+                script {
+                    // Push the image to Docker registry
+                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
+        
+        stage('Deploy to Canary') {
+            steps {
+                script {
+                    // Update the Canary deployment in Kubernetes
+                    sh """
+                    kubectl set image deployment/${CANARY_DEPLOYMENT} ${CANARY_DEPLOYMENT}=${IMAGE_NAME}:${IMAGE_TAG} -n ${KUBE_NAMESPACE}
+                    """
+                }
+            }
+        }
+        
+        stage('Canary Testing') {
+            steps {
+                script {
+                    // Here you can add some testing or monitoring steps
+                    // For example, run tests against the Canary deployment
+                    sh "kubectl get pods -n ${KUBE_NAMESPACE}"
+                }
+            }
+        }
+        
+        stage('Promote to Production') {
+            steps {
+                input message: "Promote Canary to Production?", ok: "Promote"
+                
+                script {
+                    // Update the main deployment in Kubernetes
+                    sh """
+                    kubectl set image deployment/${MAIN_DEPLOYMENT} ${MAIN_DEPLOYMENT}=${IMAGE_NAME}:${IMAGE_TAG} -n ${KUBE_NAMESPACE}
+                    """
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
+
