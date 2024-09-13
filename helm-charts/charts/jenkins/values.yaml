@@ -396,6 +396,11 @@ controller:
     - kubernetes:4285.v50ed5f624918
     - workflow-aggregator:600.vb_57cdd26fdd7
     - git:5.4.1
+    - configuration-as-code:1850.va_a_8c31d3158b_
+    - pipeline-stage-view:2.34
+    - kubernetes-cli:1.12.1
+    - slack:741.v00f9591c586d
+    - last-changes:2.7.11
   # → OWASP Markup Formatter error -> cannot login problems
   #  - configuration-as-code:1850.va_a_8c31d3158b_
 
