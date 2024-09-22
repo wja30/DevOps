@@ -1,0 +1,163 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cni.projectcalico.org/containerID: ec7f131bf250cddf65878d5d2bbbc1aceaf449c45a026f743014d5f491982131
+    cni.projectcalico.org/podIP: 20.96.46.8/32
+    cni.projectcalico.org/podIPs: 20.96.46.8/32
+  creationTimestamp: "2024-09-19T05:08:22Z"
+  generateName: prometheus-kube-state-metrics-7f979f5c55-
+  labels:
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/part-of: kube-state-metrics
+    app.kubernetes.io/version: 2.13.0
+    helm.sh/chart: kube-state-metrics-5.25.1
+    pod-template-hash: 7f979f5c55
+  name: prometheus-kube-state-metrics-7f979f5c55-pw6td
+  namespace: default
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: prometheus-kube-state-metrics-7f979f5c55
+    uid: 7aeb9ca1-1295-4edd-b911-bcc4d2e10363
+  resourceVersion: "91625"
+  uid: 49ea0577-1a1d-4bec-8b43-95bc33c08a4c
+spec:
+  automountServiceAccountToken: true
+  containers:
+  - args:
+    - --port=8080
+    - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments
+    image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.13.0
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /livez
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    name: kube-state-metrics
+    ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /readyz
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: true
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-mmb4b
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: k8s-w2
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 65534
+    runAsGroup: 65534
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+  serviceAccount: prometheus-kube-state-metrics
+  serviceAccountName: prometheus-kube-state-metrics
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-mmb4b
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2024-09-19T05:08:22Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2024-09-19T05:29:06Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2024-09-19T05:29:06Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2024-09-19T05:08:22Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://ab0482d014b4d63269b1cf1241421df24a37069eef5a8aa5375f3cc355af82c6
+    image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.13.0
+    imageID: registry.k8s.io/kube-state-metrics/kube-state-metrics@sha256:639a1e2da549210adddc0391ff91e270e83f7873014aec53258462812f741e6f
+    lastState:
+      terminated:
+        containerID: containerd://768dad828c1a1b8fc114752b4730a1531baa2df54e7be4cb2a345cc9b9e69ce4
+        exitCode: 1
+        finishedAt: "2024-09-19T05:28:06Z"
+        reason: Error
+        startedAt: "2024-09-19T05:28:06Z"
+    name: kube-state-metrics
+    ready: true
+    restartCount: 5
+    started: true
+    state:
+      running:
+        startedAt: "2024-09-19T05:28:54Z"
+  hostIP: 192.168.56.102
+  phase: Running
+  podIP: 20.96.46.8
+  podIPs:
+  - ip: 20.96.46.8
+  qosClass: BestEffort
+  startTime: "2024-09-19T05:08:22Z"
